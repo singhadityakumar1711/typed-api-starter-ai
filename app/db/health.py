@@ -1,3 +1,5 @@
+from typing import cast
+
 from fastapi import Request
 
 
@@ -8,10 +10,16 @@ async def check_postgres(request: Request) -> bool:
         result = await connection.execute("SELECT 1")
         row = await result.fetchone()
 
-    return row[0] == 1
+    if row is None:
+        return False
+
+    value = cast(tuple[int], row)
+    return value[0] == 1
 
 
 async def check_redis(request: Request) -> bool:
     redis_client = request.app.state.redis_client
 
-    return await redis_client.ping()
+    result = await redis_client.ping()
+
+    return bool(result)

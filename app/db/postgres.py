@@ -1,4 +1,3 @@
-
 from psycopg_pool import AsyncConnectionPool
 
 from app.core.config import get_settings

@@ -1,5 +1,8 @@
-from fastapi import FastAPI
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
 from app.api.middleware import request_logging_middleware
 from app.api.router import api_router
 from app.core.config import get_settings
@@ -7,8 +10,9 @@ from app.core.logging import configure_logging
 from app.db.postgres import create_postgres_pool
 from app.db.redis import create_redis_client
 
+
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     postgres_pool = create_postgres_pool()
     redis_client = create_redis_client()
 
@@ -23,15 +27,12 @@ async def lifespan(app: FastAPI):
     await redis_client.aclose()
     await postgres_pool.close()
 
+
 configure_logging()
 
 settings = get_settings()
 
-app = FastAPI(
-    title=settings.app_name,
-    debug=settings.debug,
-    lifespan=lifespan
-)
+app = FastAPI(title=settings.app_name, debug=settings.debug, lifespan=lifespan)
 
 app.middleware("http")(request_logging_middleware)
 

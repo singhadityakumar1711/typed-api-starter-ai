@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.asyncio
 async def test_health_check_status_code(client):
     response = await client.get("/api/v1/health")
@@ -25,6 +26,7 @@ async def test_request_id_header(client):
     response = await client.get("/api/v1/health")
 
     assert response.headers["X-Request-ID"]
+
 
 @pytest.mark.asyncio
 async def test_request_ids_are_unique(client):

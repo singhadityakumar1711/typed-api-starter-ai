@@ -1,15 +1,19 @@
 import logging
 import time
 import uuid
+from collections.abc import Awaitable, Callable
 
 from fastapi import Request
+from starlette.responses import Response
 
 from app.core.logging import request_id_context
 
 logger = logging.getLogger(__name__)
 
 
-async def request_logging_middleware(request: Request, call_next):
+async def request_logging_middleware(
+    request: Request, call_next: Callable[[Request], Awaitable[Response]]
+) -> Response:
     request_id = str(uuid.uuid4())
 
     token = request_id_context.set(request_id)
