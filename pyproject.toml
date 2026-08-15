@@ -1,0 +1,23 @@
+[project]
+name = "typed-api-starter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+    "psycopg[binary,pool]>=3.3.4",
+    "pydantic-settings>=2.15.0",
+    "redis>=8.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "asgi-lifespan>=2.1.0",
+    "httpx2>=2.10.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
